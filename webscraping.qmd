@@ -216,8 +216,8 @@ html |> html_elements(".important")
 html |> html_elements("#first")
 ```
 
-Another important function is `html_element()` which always the number of outputs as inputs.
-If you apply it to a whole document it'll give you the first match:
+Another important function is `html_element()` which always returns the number of outputs as inputs.
+If you apply it to a whole document, it'll give you the first match:
 
 ```{r}
 html |> html_element("p")

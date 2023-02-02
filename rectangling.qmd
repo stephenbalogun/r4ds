@@ -317,7 +317,7 @@ df4 <- tribble(
 
 `unnest_longer()` always keeps the set of columns unchanged, while changing the number of rows.
 So what happens?
-How does `unnest_longer()` produce five rows while keeping everything in `y`?
+How does `unnest_longer()` produce four rows while keeping everything in `y`?
 
 ```{r}
 df4 |> 
