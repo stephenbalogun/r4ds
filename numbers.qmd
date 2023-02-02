@@ -18,11 +18,6 @@ We'll finish off by covering the summary functions that pair well with `summariz
 
 ### Prerequisites
 
-::: callout-important
-This chapter relies on features only found in dplyr 1.1.0, which is still in development.
-If you want to live on the edge, you can get the dev versions with `devtools::install_github("tidyverse/dplyr")`.
-:::
-
 This chapter mostly uses functions from base R, which are available without loading any packages.
 But we still need the tidyverse because we'll use these base R functions inside of tidyverse functions like `mutate()` and `filter()`.
 Like in the last chapter, we'll use real examples from nycflights13, as well as toy examples made with `c()` and `tribble()`.
@@ -104,9 +99,7 @@ There are a couple of variants of `n()` that you might find useful:
     ```{r}
     flights |> 
       group_by(dest) |> 
-      summarize(
-        carriers = n_distinct(carrier)
-      ) |> 
+      summarize(carriers = n_distinct(carrier)) |> 
       arrange(desc(carriers))
     ```
 
@@ -122,6 +115,7 @@ There are a couple of variants of `n()` that you might find useful:
     Weighted counts are a common problem so `count()` has a `wt` argument that does the same thing:
 
     ```{r}
+    #| results: false
     flights |> count(tailnum, wt = distance)
     ```
 
@@ -549,7 +543,7 @@ events
 ```
 
 But how do we go from that logical vector to something that we can `group_by()`?
-`cumsum()` from @sec-cumulative-and-rolling-aggregates comes to the rescue as each occurring gap, i.e., `gap` is `TRUE`, increments `group` by one (see @sec-numeric-summaries-of-logicals on the numerical interpretation of logicals):
+`cumsum()` from @sec-cumulative-and-rolling-aggregates comes to the rescue as each occurring gap, i.e. `gap` is `TRUE`, increments `group` by one (see @sec-numeric-summaries-of-logicals on the numerical interpretation of logicals):
 
 ```{r}
 events |> mutate(
@@ -654,7 +648,7 @@ flights |>
     .groups = "drop"
   ) |> 
   ggplot(aes(x = mean, y = median)) + 
-  geom_abline(slope = 1, intercept = 0, color = "white", size = 2) +
+  geom_abline(slope = 1, intercept = 0, color = "white", linewidth = 2) +
   geom_point()
 ```
 
