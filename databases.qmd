@@ -53,7 +53,7 @@ There are three high level differences between data frames and database tables:
 
 Databases are run by database management systems (**DBMS**'s for short), which come in three basic forms:
 
--   **Client-server** DBMS's run on a powerful central server, which you connect from your computer (the client). They are great for sharing data with multiple people in an organisation. Popular client-server DBMS's include PostgreSQL, MariaDB, SQL Server, and Oracle.
+-   **Client-server** DBMS's run on a powerful central server, which you connect from your computer (the client). They are great for sharing data with multiple people in an organization. Popular client-server DBMS's include PostgreSQL, MariaDB, SQL Server, and Oracle.
 -   **Cloud** DBMS's, like Snowflake, Amazon's RedShift, and Google's BigQuery, are similar to client server DBMS's, but they run in the cloud. This means that they can easily handle extremely large datasets and can automatically provide more compute resources as needed.
 -   **In-process** DBMS's, like SQLite or duckdb, run entirely on your computer. They're great for working with large datasets where you're the primary user.
 
@@ -132,7 +132,6 @@ dbWriteTable(con, "diamonds", ggplot2::diamonds)
 
 If you're using duckdb in a real project, we highly recommend learning about `duckdb_read_csv()` and `duckdb_register_arrow()`.
 These give you powerful and performant ways to quickly load data directly into duckdb, without having to first load it into R.
-
 We'll also show off a useful technique for loading multiple files into a database in @sec-save-database.
 
 ## DBI basics
@@ -204,7 +203,7 @@ diamonds_db
 
 ::: callout-note
 There are two other common ways to interact with a database.
-First, many corporate databases are very large so you need some hierarchy to keep all the tables organised.
+First, many corporate databases are very large so you need some hierarchy to keep all the tables organized.
 In that case you might need to supply a schema, or a catalog and a schema, in order to pick the table you're interested in:
 
 ```{r}
@@ -681,7 +680,7 @@ We used that translation to teach you a little SQL; it's important to learn some
 If you've finished this chapter and would like to learn more about SQL.
 We have two recommendations:
 
--   [*SQL for Data Scientists*](https://sqlfordatascientists.com) by Renée M. P. Teate is an introduction to SQL designed specifically for the needs of data scientists, and includes examples of the sort of highly interconnected data you're likely to encounter in real organisations.
+-   [*SQL for Data Scientists*](https://sqlfordatascientists.com) by Renée M. P. Teate is an introduction to SQL designed specifically for the needs of data scientists, and includes examples of the sort of highly interconnected data you're likely to encounter in real organizations.
 -   [*Practical SQL*](https://www.practicalsql.com) by Anthony DeBarros is written from the perspective of a data journalist (a data scientist specialized in telling compelling stories) and goes into more detail about getting your data into a database and running your own DBMS.
 
 In the next chapter, we'll learn about another dplyr backend for working with large data: arrow.

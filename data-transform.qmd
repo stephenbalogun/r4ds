@@ -9,7 +9,7 @@ status("complete")
 
 ## Introduction
 
-Visualisation is an important tool for generating insight, but it's rare that you get the data in exactly the right form you need for it.
+Visualization is an important tool for generating insight, but it's rare that you get the data in exactly the right form you need for it.
 Often you'll need to create some new variables or summaries to see the most important patterns, or maybe you just want to rename the variables or reorder the observations to make the data a little easier to work with.
 You'll learn how to do all that (and more!) in this chapter, which will introduce you to data transformation using the **dplyr** package and a new dataset on flights that departed New York City in 2013.
 
@@ -90,7 +90,7 @@ flights |>
 The code starts with the `flights` dataset, then filters it, then groups it, then summarizes it.
 We'll come back to the pipe and its alternatives in @sec-pipes.
 
-dplyr's verbs are organised into four groups based on what they operate on: **rows**, **columns**, **groups**, or **tables**.
+dplyr's verbs are organized into four groups based on what they operate on: **rows**, **columns**, **groups**, or **tables**.
 In the following sections you'll learn the most important verbs for rows, columns, and groups, then we'll come back to verbs that work on tables in @sec-joins.
 Let's dive in!
 
@@ -111,7 +111,7 @@ For example, we could find all flights that arrived more than 120 minutes (two h
 
 ```{r}
 flights |> 
-  filter(arr_delay > 120)
+  filter(dep_delay > 120)
 ```
 
 As well as `>` (greater than), you can use `>=` (greater than or equal to), `<` (less than), `<=` (less than or equal to), `==` (equal to), and `!=` (not equal to).
@@ -192,7 +192,7 @@ flights |>
 ```
 
 You can combine `arrange()` and `filter()` to solve more complex problems.
-For example, we could look for the flights that were most delayed on arrival that left on roughly on time:
+For example, we could filter for the flights that left roughly on time, then arrange the results to see which flights were most delayed on arrival:
 
 ```{r}
 flights |> 
@@ -210,12 +210,12 @@ Most of the time, however, you'll want the distinct combination of some variable
 flights |> 
   distinct()
 
-# This finds all unique origin and destination pairs.
+# This finds all unique origin and destination pairs
 flights |> 
   distinct(origin, dest)
 ```
 
-Note that if you want to find the number of duplicates, or rows that weren't duplicated, you're better off swapping `distinct()` for `count()` and then filtering as needed.
+Note that if you want to find the number of duplicates, or rows that weren't duplicated, you're better off swapping `distinct()` for `count()`, which will give the number of observations per unique level, and then filtering as needed.
 
 ### Exercises
 
@@ -245,7 +245,7 @@ Note that if you want to find the number of duplicates, or rows that weren't dup
 ## Columns
 
 There are four important verbs that affect the columns without changing the rows: `mutate()`, `select()`, `rename()`, and `relocate()`.
-`mutate()` creates new columns that are functions of the existing columns; `select()`, `rename()`, and `relocate()` change which columns are present, their names, or their positions.
+`mutate()` creates new columns that are derived from the existing columns; `select()`, `rename()`, and `relocate()` change which columns are present, their names, or their positions.
 We'll also discuss `pull()` since it allows you to get a column out of data frame.
 
 ### `mutate()` {#sec-mutate}
@@ -278,7 +278,7 @@ flights |>
 
 The `.` is a sign that `.before` is an argument to the function, not the name of a new variable.
 You can also use `.after` to add after a variable, and in both `.before` and `.after` you can use the variable name instead of a position.
-For example, we could add the new variables after `day:`
+For example, we could add the new variables after `day`:
 
 ```{r}
 flights |> 
@@ -307,7 +307,7 @@ flights |>
 It's not uncommon to get datasets with hundreds or even thousands of variables.
 In this situation, the first challenge is often just focusing on the variables you're interested in.
 `select()` allows you to rapidly zoom in on a useful subset using operations based on the names of the variables.
-`select()` is not terribly useful with the flights data because we only have 19 variables, but you can still get the general idea of how it works:
+`select()` is not terribly useful with the `flights` data because we only have 19 variables, but you can still get the general idea of how it works:
 
 ```{r}
 # Select columns by name
@@ -397,26 +397,21 @@ ggplot(flights, aes(x = dep_sched %% 60)) + geom_histogram(binwidth = 1)
 ggplot(flights, aes(x = air_time - airtime2)) + geom_histogram()
 ```
 
-1.  Compare `air_time` with `arr_time - dep_time`.
-    What do you expect to see?
-    What do you see?
-    What do you need to do to fix it?
-
-2.  Compare `dep_time`, `sched_dep_time`, and `dep_delay`.
+1.  Compare `dep_time`, `sched_dep_time`, and `dep_delay`.
     How would you expect those three numbers to be related?
 
-3.  Brainstorm as many ways as possible to select `dep_time`, `dep_delay`, `arr_time`, and `arr_delay` from `flights`.
+2.  Brainstorm as many ways as possible to select `dep_time`, `dep_delay`, `arr_time`, and `arr_delay` from `flights`.
 
-4.  What happens if you include the name of a variable multiple times in a `select()` call?
+3.  What happens if you include the name of a variable multiple times in a `select()` call?
 
-5.  What does the `any_of()` function do?
+4.  What does the `any_of()` function do?
     Why might it be helpful in conjunction with this vector?
 
     ```{r}
     variables <- c("year", "month", "day", "dep_delay", "arr_delay")
     ```
 
-6.  Does the result of running the following code surprise you?
+5.  Does the result of running the following code surprise you?
     How do the select helpers deal with case by default?
     How can you change that default?
 
@@ -425,6 +420,8 @@ ggplot(flights, aes(x = air_time - airtime2)) + geom_histogram()
 
     select(flights, contains("TIME"))
     ```
+
+6.  Rename `air_time` to `air_time_min` to indicate units of measurement and move it to the beginning of the data frame.
 
 ## Groups
 
@@ -525,7 +522,7 @@ daily
 ```
 
 When you summarize a tibble grouped by more than one variable, each summary peels off the last group.
-In hindsight, this wasn't great way to make this function work, but it's difficult to change without breaking existing code.
+In hindsight, this wasn't a great way to make this function work, but it's difficult to change without breaking existing code.
 To make it obvious what's happening, dplyr displays a message that tells you how you can change this behavior:
 
 ```{r}
@@ -579,7 +576,7 @@ As you can see, when you summarize an ungrouped data frame, you get a single row
 
 4.  What happens if you supply a negative `n` to `slice_min()` and friends?
 
-5.  Explain what `count()` does in terms of the dplyr verbs you just learn.
+5.  Explain what `count()` does in terms of the dplyr verbs you just learned.
     What does the `sort` argument to `count()` do?
 
 6.  Suppose we have the following tiny data frame:
@@ -694,35 +691,33 @@ That seems pretty surprising, so lets draw a scatterplot of number of flights vs
 
 ```{r}
 #| fig-alt: >
-#|   A scatterplot showing number of flights versus after delay. Delays
+#|   A scatterplot showing number of flights versus average arrival delay. Delays
 #|   for planes with very small number of flights have very high variability
 #|   (from -50 to ~300), but the variability rapidly decreases as the 
 #|   number of flights increases.
 
-ggplot(delays, aes(x = n, y = delay)) + 
+ggplot(delays, aes(x = delay, y = n)) + 
   geom_point(alpha = 1/10)
 ```
 
 Not surprisingly, there is much greater variation in the average delay when there are few flights for a given plane.
-The shape of this plot is very characteristic: whenever you plot a mean (or other summary) vs. group size, you'll see that the variation decreases as the sample size increases[^data-transform-4].
+The shape of this plot is very characteristic: whenever you plot a mean (or other summary statistics) vs. group size, you'll see that the variation decreases as the sample size increases[^data-transform-4].
 
-[^data-transform-4]: \*cough\* the central limit theorem \*cough\*.
+[^data-transform-4]: \*cough\* the law of large numbers \*cough\*.
 
 When looking at this sort of plot, it's often useful to filter out the groups with the smallest numbers of observations, so you can see more of the pattern and less of the extreme variation in the smallest groups:
 
 ```{r}
 #| warning: false
 #| fig-alt: >
-#|   Now that the y-axis (average delay) is smaller (-20 to 60 minutes), 
-#|   we can see a more complicated story. The smooth line suggests
-#|   an initial decrease in average delay from 10 minutes to 0 minutes 
-#|   as number of flights per plane increases from 25 to 100.
-#|   This is followed by a gradual increase up to 10 minutes for 250 
-#|   flights, then a gradual decrease to ~5 minutes at 500 flights.
+#|   Scatterplot of number of flights of a given plane vs. the average delay 
+#|   for those flights, for planes with more than 25 flights. As average delay
+#|   increases from -20 to 10, the number of flights also increases. For 
+#|   larger average delayes, the number of flights decreases.
 
 delays |>  
   filter(n > 25) |> 
-  ggplot(aes(x = n, y = delay)) + 
+  ggplot(aes(x = delay, y = n)) + 
   geom_point(alpha = 1/10) + 
   geom_smooth(se = FALSE)
 ```
@@ -731,7 +726,7 @@ Note the handy pattern for combining ggplot2 and dplyr.
 It's a bit annoying that you have to switch from `|>` to `+`, but it's not too much of a hassle once you get the hang of it.
 
 There's another common variation on this pattern that we can see in some data about baseball players.
-The following code uses data from the **Lahman** package to compare what proportion of times a player hits the ball vs. the number of attempts they take:
+The following code uses data from the **Lahman** package to compare what proportion of times a player gets a hit vs. the number of times they try to put the ball in play:
 
 ```{r}
 batters <- Lahman::Batting |> 

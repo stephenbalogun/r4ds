@@ -174,8 +174,6 @@ This makes it possible to add textual labels to your plots.
 There are two possible sources of labels.
 First, you might have a tibble that provides labels.
 In the following plot we pull out the cars with the highest engine size in each drive type and save their information as a new data frame called `label_info`.
-In order to create the `label_info` data frame we used a number of new dplyr functions.
-You'll learn more about each of these soon!
 
 ```{r}
 label_info <- mpg |>
@@ -217,41 +215,6 @@ ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
 ```
 
 Note the use of `hjust` and `vjust` to control the alignment of the label.
-@fig-just shows all nine possible combinations.
-
-```{r}
-#| label: fig-just
-#| echo: false
-#| fig-width: 4.5
-#| fig-asp: 0.5
-#| out-width: "60%"
-#| fig-cap: >
-#|   All nine combinations of `hjust` and `vjust`.
-#| fig-alt: >
-#|   A 1x1 grid. At (0,0) hjust is set to left and vjust is set to bottom. 
-#|   At (0.5, 0) hjust is center and vjust is bottom and at (1, 0) hjust is 
-#|   right and vjust is bottom. At (0, 0.5) hjust is left and vjust is 
-#|   center, at (0.5, 0.5) hjust is center and vjust is center, and at (1, 0.5) 
-#|   hjust is right and vjust is center. Finally, at (1, 0) hjust is left and 
-#|   vjust is top, at (0.5, 1) hjust is center and vjust is top, and at (1, 1) 
-#|   hjust is right and vjust is bottom.
-
-vjust <- c(bottom = 0, center = 0.5, top = 1)
-hjust <- c(left = 0, center = 0.5, right = 1)
-
-df <- crossing(hj = names(hjust), vj = names(vjust)) |>
-  mutate(
-    y = vjust[vj],
-    x = hjust[hj],
-    label = paste0("hjust = '", hj, "'\n", "vjust = '", vj, "'")
-  )
-
-ggplot(df, aes(x, y)) +
-  geom_point(color = "grey70", size = 5) +
-  geom_point(size = 0.5, color = "red") +
-  geom_text(aes(label = label, hjust = hj, vjust = vj), size = 4) +
-  labs(x = NULL, y = NULL)
-```
 
 However the annotated plot we made above is hard to read because the labels overlap with each other, and with the points.
 We can make things a little better by switching to `geom_label()` which draws a rectangle behind the text.
@@ -342,28 +305,9 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   )
 ```
 
-If you want to place the text exactly on the borders of the plot, you can use `+Inf` and `-Inf`.
-Since we're no longer computing the positions from `mpg`, we can use `tibble()` to create the data frame:
+If you want to place the text exactly on the borders of the plot, you can use set `displ = Inf` and `hwy = Inf` in the tibble above, instead of the calculated maximum values.
 
-```{r}
-#| fig-alt: >
-#|   Scatterplot of highway fuel efficiency versus engine size of cars. On the 
-#|   top right corner, flush against the corner, is an annotation that 
-#|   reads "increasing engine size is related to decreasing fuel economy". 
-#|   The text spans two lines.
-
-label_info <- tibble(
-  displ = Inf,
-  hwy = Inf,
-  label = "Increasing engine size is \nrelated to decreasing fuel economy."
-)
-
-ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_point() +
-  geom_text(data = label_info, aes(label = label), vjust = "top", hjust = "right")
-```
-
-Alternatively, we can add the annotation without creating a new data frame, using `annotate()`.
+We can alternatively add the annotation without creating a new data frame, using `annotate()`.
 This function adds a geom to a plot, but it doesn't map variables of a data frame to an aesthetic.
 The first argument of this function, `geom`, is the geometric object you want to use for annotation.
 
@@ -390,7 +334,7 @@ The `x` and `y` aesthetics define the starting location of the segment and `xend
 ```{r}
 #| fig-alt: >
 #|   Scatterplot of highway fuel efficiency versus engine size of cars. A red 
-#|   arrow pointing down follows the trend of the points and the annptation 
+#|   arrow pointing down follows the trend of the points and the annotation 
 #|   placed next to the arrow reads "increasing engine size is related to 
 #|   decreasing fuel economy". The arrow and the annotation text is red.
 
@@ -608,7 +552,7 @@ The theme setting `legend.position` controls where the legend is drawn:
 ```{r}
 #| layout-ncol: 2
 #| fig-width: 4
-#| fig-asp: 1
+#| fig-height: 2
 #| fig-alt: >
 #|   Four scatterplots of highway fuel efficiency versus engine size of cars 
 #|   where points are colored based on class of car. Clockwise, the legend 
@@ -756,7 +700,7 @@ For example, if we map presidential party to color, we want to use the standard 
 #|   Line plot of id number of presidents versus the year they started their 
 #|   presidency. Start year is marked with a point and a segment that starts 
 #|   there and ends at the end of the presidency. Democratic presidents are 
-#|   represented in black and Republicans in red.
+#|   represented in blue and Republicans in red.
 
 presidential |>
   mutate(id = 33 + row_number()) |>
@@ -828,11 +772,13 @@ Compare the following two plots:
 #| fig-height: 3
 #| message: false
 
+# Left
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = class)) +
   geom_smooth() +
   coord_cartesian(xlim = c(5, 7), ylim = c(10, 30))
 
+# Right
 mpg |>
   filter(displ >= 5, displ <= 7, hwy >= 10, hwy <= 30) |>
   ggplot(aes(x = displ, y = hwy)) +
@@ -853,9 +799,11 @@ For example, if we extract two classes of cars and plot them separately, it's di
 suv <- mpg |> filter(class == "suv")
 compact <- mpg |> filter(class == "compact")
 
+# Left
 ggplot(suv, aes(x = displ, y = hwy, color = drv)) +
   geom_point()
 
+# Right
 ggplot(compact, aes(x = displ, y = hwy, color = drv)) +
   geom_point()
 ```
@@ -871,12 +819,14 @@ x_scale <- scale_x_continuous(limits = range(mpg$displ))
 y_scale <- scale_y_continuous(limits = range(mpg$hwy))
 col_scale <- scale_color_discrete(limits = unique(mpg$drv))
 
+# Left
 ggplot(suv, aes(x = displ, y = hwy, color = drv)) +
   geom_point() +
   x_scale +
   y_scale +
   col_scale
 
+# Right
 ggplot(compact, aes(x = displ, y = hwy, color = drv)) +
   geom_point() +
   x_scale +
@@ -974,7 +924,7 @@ It's also possible to control individual components of each theme, like the size
 We've already seen that `legend.position` controls where the legend is drawn.
 There are many other aspects of the legend that can be customized with `theme()`.
 For example, in the plot below we change the direction of the legend as well as put a black border around it.
-A few other helpful `theme()` components are use to change the placement for format of the title and caption text.
+A few other helpful `theme()` components are used to change the placement for format of the title and caption text.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
@@ -1037,7 +987,7 @@ In the following, `|` places the `p1` and `p3` next to each other and `/` moves 
 ```{r}
 #| fig-alt: >
 #|   Three plots laid out such that first and third plot are next to each other 
-#|   and the second plot streatched beneath them. The first plot is a 
+#|   and the second plot stretched beneath them. The first plot is a 
 #|   scatterplot of highway mileage versus engine size, third plot is a 
 #|   scatterplot of highway mileage versus city mileage, and the third plot is 
 #|   side-by-side boxplots of highway mileage versus drive train) placed next 
@@ -1059,11 +1009,12 @@ Finally, we have also customized the heights of the various components of our pa
 Patchwork divides up the area you have allotted for your plot using this scale and places the components accordingly.
 
 ```{r}
+#| fig-width: 10
 #| fig-alt: >
 #|   Five plots laid out such that first two plots are next to each other. Plots 
 #|   three and four are underneath them. And the fifth plot stretches under them. 
 #|   The patchworked plot is titled "City and highway mileage for cars with 
-#|   different drive trains" and captioned "Source: Source: https://fueleconomy.gov". 
+#|   different drive trains" and captioned "Source: https://fueleconomy.gov". 
 #|   The first two plots are side-by-side box plots. Plots 3 and 4 are density 
 #|   plots. And the fifth plot is a faceted scatterplot. Each of these plots show 
 #|   geoms colored by drive train, but the patchworked plot has only one legend 
@@ -1093,7 +1044,7 @@ p5 <- ggplot(mpg, aes(x = cty, y = hwy, color = drv)) +
 (guide_area() / (p1 + p2) / (p3 + p4) / p5) +
   plot_annotation(
     title = "City and highway mileage for cars with different drive trains",
-    caption = "Source: Source: https://fueleconomy.gov."
+    caption = "Source: https://fueleconomy.gov."
   ) +
   plot_layout(
     guides = "collect",
