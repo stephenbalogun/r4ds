@@ -567,7 +567,7 @@ locations |>
   )
 ```
 
-If these case studies have whetted your appetite for more real-life rectangling, you can see a few more examples in `vignette("rectangling", package = "tidyr")`.
+If these case studies have whetted your appetite for more real-life rectangling, you can see a few more examples in `vignette("rectangle", package = "tidyr")`.
 
 ### Exercises
 
